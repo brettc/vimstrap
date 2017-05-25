@@ -1,4 +1,5 @@
 " Bootstrap & Setup {{{
+" vim: fdm=marker
 
 if has('vim_starting')
   set nocompatible
@@ -14,13 +15,11 @@ if !filereadable(vimplug_exists)
 
   autocmd VimEnter * PlugInstall
 endif
+
 "}}}
 " Plugins {{{
 
-" Required
 call plug#begin(expand('~/.vim/plugged'))
-
-" TODO:
 
 " Directories etc
 " Plug 'scrooloose/nerdtree'
@@ -31,6 +30,7 @@ call plug#begin(expand('~/.vim/plugged'))
 " Plug 'greplace.vim'
 " Plug 'sjl/gundo.vim'
 " Plug 'junegunn/vim-easy-align'
+
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'metakirby5/codi.vim'
 Plug 'jeetsukumaran/vim-filebeagle'
@@ -74,14 +74,17 @@ Plug 'sheerun/vim-polyglot'
 Plug 'davidhalter/jedi-vim'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'tell-k/vim-autopep8'
-" Plug 'tmhedberg/SimpylFold'
-" Plug 'alfredodeza/pytest.vim'
+Plug 'tmhedberg/SimpylFold'
+Plug 'alfredodeza/pytest.vim'
+Plug 'kana/vim-textobj-user'
+Plug 'bps/vim-textobj-python'
+Plug 'Konfekt/FastFold'
 " Plug 'janko-m/vim-test'
 " Plug '5long/pytest-vim-compiler'
 " Plug 'Rykka/doctest.vim'
-" Plug 'Konfekt/FastFold'
-" Plug 'kana/vim-textobj-user'
-" Plug 'bps/vim-textobj-python'
+"
+" Database
+Plug 'vim-scripts/dbext.vim'
 
 " Writing-----------------
 " Pandoc. The last one is good with Unite
@@ -102,6 +105,7 @@ Plug 'honza/vim-snippets'
 
 "" Colors
 Plug 'NLKNguyen/papercolor-theme'
+
 call plug#end()
 
 " Required:
@@ -147,13 +151,22 @@ set fileformats=unix,dos,mac
 set showcmd
 set shell=/bin/sh
 
-"}}}
-" Session management {{{
-"
-let g:session_directory = "~/.config/vim/session"
-let g:session_autoload = "no"
-let g:session_autosave = "yes"
-let g:session_command_aliases = 1
+set wildmenu
+
+"" Use modeline overrides
+set modeline
+set modelines=10
+
+set title
+set titleold="Terminal"
+set titlestring=%F
+
+set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
+
+if exists("*fugitive#statusline")
+  set statusline+=%{fugitive#statusline()}
+endif
+
 
 "}}}
 " Visual Settings {{{
@@ -205,7 +218,7 @@ endif
 
 
 "}}}
-" CursorShape {{{
+" Terminal Handling {{{
 if exists('$TMUX')
     let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
     let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
@@ -216,50 +229,21 @@ else
     let &t_SR = "\<esc>]50;CursorShape=2\x7"
 endif
 
-if &term =~ "xterm-256color\\|xterm\\|rxvt"
-  " use an orange cursor in insert mode
-  let &t_SI = "\<Esc>]12;orange\x7"
-  " use a red cursor otherwise
-  let &t_EI = "\<Esc>]12;red\x7"
-  silent !echo -ne "\033]12;red\007"
-  " reset cursor when vim exits
-  autocmd VimLeave * silent !echo -ne "\033]112\007"
-  " use \003]12;gray\007 for gnome-terminal and rxvt up to version 9.21
-endif
 " }}}
+" Session management {{{
+"
+let g:session_directory = "~/.config/vim/session"
+let g:session_autoload = "no"
+let g:session_autosave = "yes"
+let g:session_command_aliases = 1
+
+"}}}
 " {{{ Bookmarks
 
 let g:bookmark_auto_save = 1
 
 " }}}
-
-"" Use modeline overrides
-set modeline
-set modelines=10
-
-set title
-set titleold="Terminal"
-set titlestring=%F
-
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
-
-" Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-if exists("*fugitive#statusline")
-  set statusline+=%{fugitive#statusline()}
-endif
-
-" IndentLine {{{
-" Not used
-let g:indentLine_enabled = 1
-let g:indentLine_concealcursor = 0
-let g:indentLine_char = '┆'
-let g:indentLine_faster = 1
-" }}}
-" vim-airline {{{
+" Airline {{{
 "
 let g:airline_theme = 'powerlineish'
 let g:airline#extensions#syntastic#enabled = 1
@@ -268,24 +252,54 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
 
-" }}}
-" Nice Abbreviations {{{
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
 
-cnoreabbrev W! w!
-cnoreabbrev Q! q!
-cnoreabbrev Qall! qall!
-cnoreabbrev Wq wq
-cnoreabbrev Wa wa
-cnoreabbrev wQ wq
-cnoreabbrev WQ wq
-cnoreabbrev W w
-cnoreabbrev Q q
-cnoreabbrev Qall qall
-" }}}
+if !exists('g:airline_powerline_fonts')
+  let g:airline#extensions#tabline#left_sep = ' '
+  let g:airline#extensions#tabline#left_alt_sep = '|'
+  let g:airline_left_sep          = '▶'
+  let g:airline_left_alt_sep      = '»'
+  let g:airline_right_sep         = '◀'
+  let g:airline_right_alt_sep     = '«'
+  let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
+  let g:airline#extensions#readonly#symbol   = '⊘'
+  let g:airline#extensions#linecolumn#prefix = '¶'
+  let g:airline#extensions#paste#symbol      = 'ρ'
+  let g:airline_symbols.linenr    = '␊'
+  let g:airline_symbols.branch    = '⎇'
+  let g:airline_symbols.paste     = 'ρ'
+  let g:airline_symbols.paste     = 'Þ'
+  let g:airline_symbols.paste     = '∥'
+  let g:airline_symbols.whitespace = 'Ξ'
+else
+  let g:airline#extensions#tabline#left_sep = ''
+  let g:airline#extensions#tabline#left_alt_sep = ''
 
-"*****************************************************************************
-"" Functions
-"*****************************************************************************
+  " powerline symbols
+  let g:airline_left_sep = ''
+  let g:airline_left_alt_sep = ''
+  let g:airline_right_sep = ''
+  let g:airline_right_alt_sep = ''
+  let g:airline_symbols.branch = ''
+  let g:airline_symbols.readonly = ''
+  let g:airline_symbols.linenr = ''
+endif
+""}}}
+" Autocmd Rules {{{
+" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
+augroup vimrc-sync-fromstart
+  autocmd!
+  autocmd BufEnter * :syntax sync maxlines=200
+augroup END
+
+" Remember cursor position
+augroup vimrc-remember-cursor-position
+  autocmd!
+  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+augroup END
+
 if !exists('*s:setupWrapping')
   function s:setupWrapping()
     set wrap
@@ -294,28 +308,13 @@ if !exists('*s:setupWrapping')
   endfunction
 endif
 
-"*****************************************************************************
-"" Autocmd Rules
-"*****************************************************************************
-"" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
-augroup vimrc-sync-fromstart
-  autocmd!
-  autocmd BufEnter * :syntax sync maxlines=200
-augroup END
-
-"" Remember cursor position
-augroup vimrc-remember-cursor-position
-  autocmd!
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-augroup END
-
-"" txt
+" txt
 augroup vimrc-wrapping
   autocmd!
   autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
 augroup END
 
-"" make/cmake
+" make/cmake
 augroup vimrc-make-cmake
   autocmd!
   autocmd FileType make setlocal noexpandtab
@@ -323,12 +322,8 @@ augroup vimrc-make-cmake
 augroup END
 
 set autoread
-
-
-
-"*****************************************************************************
-"" Custom configs
-"*****************************************************************************
+" }}}
+" File Based configs {{{
 
 " c
 autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
@@ -383,45 +378,20 @@ let g:airline#extensions#virtualenv#enabled = 1
 let g:polyglot_disabled = ['python']
 let python_highlight_all = 1
 
+" }}}
+" Nice Abbreviations {{{
 
-" Airline {{{
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-if !exists('g:airline_powerline_fonts')
-  let g:airline#extensions#tabline#left_sep = ' '
-  let g:airline#extensions#tabline#left_alt_sep = '|'
-  let g:airline_left_sep          = '▶'
-  let g:airline_left_alt_sep      = '»'
-  let g:airline_right_sep         = '◀'
-  let g:airline_right_alt_sep     = '«'
-  let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
-  let g:airline#extensions#readonly#symbol   = '⊘'
-  let g:airline#extensions#linecolumn#prefix = '¶'
-  let g:airline#extensions#paste#symbol      = 'ρ'
-  let g:airline_symbols.linenr    = '␊'
-  let g:airline_symbols.branch    = '⎇'
-  let g:airline_symbols.paste     = 'ρ'
-  let g:airline_symbols.paste     = 'Þ'
-  let g:airline_symbols.paste     = '∥'
-  let g:airline_symbols.whitespace = 'Ξ'
-else
-  let g:airline#extensions#tabline#left_sep = ''
-  let g:airline#extensions#tabline#left_alt_sep = ''
-
-  " powerline symbols
-  let g:airline_left_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_right_alt_sep = ''
-  let g:airline_symbols.branch = ''
-  let g:airline_symbols.readonly = ''
-  let g:airline_symbols.linenr = ''
-endif
-""}}}
-
-
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qall qall
+" }}}
 " Mappings ---------------------------------------------------------------- {{{
 
 " Dvorak easiness
@@ -433,6 +403,12 @@ map <c-s> :w<CR>
 " Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
+noremap <Leader>c <C-w>c
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
 "" Buffer nav
 " noremap <silent> <S-t> :bn<CR>
@@ -447,10 +423,14 @@ nnoremap <silent> <S-t> :tabnew<CR>
 nnoremap <silent> <leader><space> :noh<cr>
 
 "" Switching windows
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-l> <C-w>l
-noremap <C-h> <C-w>h
+" noremap <C-j> <C-w>j
+" noremap <C-k> <C-w>k
+" noremap <C-l> <C-w>l
+" noremap <C-h> <C-w>h
+noremap <C-right> <C-w>w
+noremap <C-left> <C-w>W
+noremap <S-right> :bn<cr>
+noremap <S-left> :bp<cr>
 
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
@@ -460,24 +440,23 @@ vmap > >gv
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-noremap <leader>f :Gfiles<cr>
-noremap <leader>F :Files<cr>
+noremap <leader>n :GFiles<cr>
+noremap <leader>N :Files<cr>
 noremap <leader>b :Buffers<cr>
 
-"" More specific mappings
+"" Git
 
 "" Open current line on GitHub
-nnoremap <Leader>o :.Gbrowse<CR>
+" nnoremap <Leader>o :.Gbrowse<CR>
 
-"" Git
-noremap <Leader>ga :Gwrite<CR>
-noremap <Leader>gc :Gcommit<CR>
-noremap <Leader>gsh :Gpush<CR>
-noremap <Leader>gll :Gpull<CR>
-noremap <Leader>gd :Gvdiff<CR>
-noremap <Leader>gs :Gstatus<CR>
-noremap <Leader>gb :Gblame<CR>
-noremap <Leader>gr :Gremove<CR>
+" noremap <Leader>ga :Gwrite<CR>
+" noremap <Leader>gc :Gcommit<CR>
+" noremap <Leader>gsh :Gpush<CR>
+" noremap <Leader>gll :Gpull<CR>
+" noremap <Leader>gd :Gvdiff<CR>
+" noremap <Leader>gs :Gstatus<CR>
+" noremap <Leader>gb :Gblame<CR>
+" noremap <Leader>gr :Gremove<CR>
 
 " session management
 nnoremap <leader>so :OpenSession<Space>
@@ -538,5 +517,3 @@ endif
 
 
 " }}}
-
-" vim: fdm=marker
