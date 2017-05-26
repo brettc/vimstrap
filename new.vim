@@ -212,8 +212,8 @@ if has("gui")
     set guifont=Hack\ Regular:h14
 else
     " Make this easy to see
-    autocmd WinEnter * setlocal cursorline
-    autocmd WinLeave * setlocal nocursorline
+    autocmd BufEnter * setlocal cursorline
+    autocmd BufLeave * setlocal nocursorline
 endif
 
 
@@ -230,6 +230,8 @@ else
 endif
 
 " }}}
+
+" Plugin Config
 " Session management {{{
 "
 let g:session_directory = "~/.config/vim/session"
@@ -286,7 +288,37 @@ else
   let g:airline_symbols.readonly = ''
   let g:airline_symbols.linenr = ''
 endif
+
+" vim-airline
+let g:airline#extensions#virtualenv#enabled = 1
+
 ""}}}
+" FZF {{{
+"
+let g:fzf_layout = { 'down': '~40%' }
+
+" In Neovim, you can set up fzf window using a Vim command
+" let g:fzf_layout = { 'window': 'enew' }
+" let g:fzf_layout = { 'window': '-tabnew' }
+
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" }}}
+
+" File Handling
 " Autocmd Rules {{{
 " The PC is fast enough, do syntax highlight syncing from start unless 200 lines
 augroup vimrc-sync-fromstart
@@ -323,19 +355,11 @@ augroup END
 
 set autoread
 " }}}
-" File Based configs {{{
-
-" c
+" C/C++ {{{
 autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
-
-
-" html
-" for html files, 2 spaces
-autocmd Filetype html setlocal ts=2 sw=2 expandtab
-
-
-" javascript
+"}}}
+" Javascript {{{
 let g:javascript_enable_domhtmlcss = 1
 
 " vim-javascript
@@ -344,9 +368,9 @@ augroup vimrc-javascript
   autocmd FileType javascript set tabstop=4|set shiftwidth=4|set expandtab softtabstop=4
 augroup END
 
+"}}}
+" Python {{{
 
-" python
-" vim-python
 augroup vimrc-python
   autocmd!
   autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
@@ -354,15 +378,17 @@ augroup vimrc-python
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
 
-" let g:deoplete#enable_at_startup = 1
-
 " jedi-vim
 let g:jedi#popup_on_dot = 0
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
+" let g:jedi#goto_assignments_command = "<leader>g"
+" let g:jedi#goto_definitions_command = "<leader>d"
 " let g:jedi#usages_command = "<leader>n"
 " let g:jedi#rename_command = "<leader>r"
+let g:jedi#goto_assignments_command = ""
+let g:jedi#goto_definitions_command = ""
+let g:jedi#usages_command = ""
+let g:jedi#rename_command = ""
+let g:jedi#documentation_command = "K"
 let g:jedi#show_call_signatures = 2
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
@@ -370,15 +396,13 @@ let g:jedi#smart_auto_mappings = 0
 " syntastic
 let g:syntastic_python_checkers=['python', 'flake8']
 
-" vim-airline
-let g:airline#extensions#virtualenv#enabled = 1
-
-" Syntax highlight
 " Default highlight is better than polyglot
 let g:polyglot_disabled = ['python']
 let python_highlight_all = 1
 
-" }}}
+"}}}
+
+" General niceness
 " Nice Abbreviations {{{
 
 cnoreabbrev W! w!
@@ -439,6 +463,8 @@ vmap > >gv
 "" Move visual block
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+
 
 noremap <leader>n :GFiles<cr>
 noremap <leader>N :Files<cr>
