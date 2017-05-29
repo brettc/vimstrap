@@ -22,6 +22,7 @@ endif
 call plug#begin(expand('~/.vim/plugged'))
 
 " Directories etc
+" I don't think I need NerdTree!
 " Plug 'scrooloose/nerdtree'
 " Plug 'jistr/vim-nerdtree-tabs'
 " Plug 'junegunn/vim-peekaboo'
@@ -373,7 +374,9 @@ augroup END
 
 augroup vimrc-python
   autocmd!
-  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
+  " Not sure about the color column
+  " autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
+  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
       \ formatoptions+=croq softtabstop=4
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
