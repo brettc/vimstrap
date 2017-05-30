@@ -23,38 +23,46 @@ call plug#begin(expand('~/.vim/plugged'))
 
 " Directories etc
 " I don't think I need NerdTree!
-" Plug 'scrooloose/nerdtree'
-" Plug 'jistr/vim-nerdtree-tabs'
 " Plug 'junegunn/vim-peekaboo'
 " Plug 'mbbill/undotree'
 " Plug 'sjl/vitality.vim'
 " Plug 'greplace.vim'
 " Plug 'sjl/gundo.vim'
 " Plug 'junegunn/vim-easy-align'
+Plug 'kien/ctrlp.vim'
+Plug 'tacahiroy/ctrlp-funky'
 
+" Testing
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'metakirby5/codi.vim'
 Plug 'jeetsukumaran/vim-filebeagle'
 
-" Tim Popes stuff
+" Commenting
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
+
+" Unix commands. 
 Plug 'tpope/vim-eunuch'
+
+" This is my file explorer! It is all I need.
 Plug 'tpope/vim-vinegar'
 
-" Ok, let's try this...
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+" Versioning / Git etc
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
+Plug 'airblade/vim-gitgutter'
+
+" Fast File lookup. Note: This is Terminal Specific!
+if !has("gui")
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
+endif
 
 " Plug 'ctrlpvim/ctrlp.vim'
 " This appears to be less than good on nvim
 " Plug 'Shougo/denite.vim'
-" Plug 'Shougo/unite.vim'
-" Plug 'Shougo/unite-outline'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/unite-outline'
 "
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
 " Plug 'vim-scripts/grep.vim'
 " Plug 'vim-scripts/CSApprox'
 
@@ -66,6 +74,7 @@ Plug 'scrooloose/syntastic'
 " Plug 'Yggdroot/indentLine'
 " let g:indentLine_char = '┊'
 
+" For lots of syntax highlighting
 Plug 'sheerun/vim-polyglot'
 
 " Python plugins
@@ -88,11 +97,14 @@ Plug 'Konfekt/FastFold'
 Plug 'vim-scripts/dbext.vim'
 
 " Writing-----------------
-" Pandoc. The last one is good with Unite
+Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/limelight.vim'
 Plug 'vim-pandoc/vim-pantondoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-pandoc-after'
+
 Plug 'lervag/vimtex'
+
 Plug 'reedes/vim-wordy'
 Plug 'reedes/vim-textobj-sentence'
 
@@ -105,6 +117,8 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 "" Colors
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'NLKNguyen/papercolor-theme'
 
 call plug#end()
@@ -152,7 +166,6 @@ set fileformats=unix,dos,mac
 set showcmd
 set shell=/bin/sh
 
-set wildmenu
 
 "" Use modeline overrides
 set modeline
@@ -167,6 +180,13 @@ set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 if exists("*fugitive#statusline")
   set statusline+=%{fugitive#statusline()}
 endif
+
+" Wild ignore
+set wildmenu
+set wildignore+=*.pch,*.opt,*.ncb,*.dep,*.pyc,.git,.bzr,*.o,build/**
+" set wildmode=list:full
+" set suffixes-=.h
+" set suffixes+=.pch,.idb,.pdb
 
 
 "}}}
