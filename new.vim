@@ -40,7 +40,7 @@ Plug 'jeetsukumaran/vim-filebeagle'
 " Commenting
 Plug 'tpope/vim-commentary'
 
-" Unix commands. 
+" Unix commands.
 Plug 'tpope/vim-eunuch'
 
 " This is my file explorer! It is all I need.
