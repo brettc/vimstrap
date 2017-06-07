@@ -23,19 +23,19 @@ call plug#begin(expand('~/.vim/plugged'))
 
 " Directories etc
 " I don't think I need NerdTree!
-" Plug 'junegunn/vim-peekaboo'
 " Plug 'mbbill/undotree'
 " Plug 'sjl/vitality.vim'
 " Plug 'greplace.vim'
 " Plug 'sjl/gundo.vim'
 " Plug 'junegunn/vim-easy-align'
-Plug 'kien/ctrlp.vim'
-Plug 'tacahiroy/ctrlp-funky'
+" Plug 'kien/ctrlp.vim'
+" Plug 'tacahiroy/ctrlp-funky'
+"
+" Plug 'junegunn/vim-peekaboo'
+" Plug 'metakirby5/codi.vim'
 
-" Testing
 Plug 'MattesGroeger/vim-bookmarks'
-Plug 'metakirby5/codi.vim'
-Plug 'jeetsukumaran/vim-filebeagle'
+" Plug 'jeetsukumaran/vim-filebeagle'
 
 " Commenting
 Plug 'tpope/vim-commentary'
@@ -52,10 +52,10 @@ Plug 'junegunn/gv.vim'
 Plug 'airblade/vim-gitgutter'
 
 " Fast File lookup. Note: This is Terminal Specific!
-if !has("gui")
-    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-    Plug 'junegunn/fzf.vim'
-endif
+" if !has("gui")
+"     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"     Plug 'junegunn/fzf.vim'
+" endif
 
 " Plug 'ctrlpvim/ctrlp.vim'
 " This appears to be less than good on nvim
@@ -69,8 +69,9 @@ Plug 'Shougo/unite-outline'
 " Plug 'bronson/vim-trailing-whitespace'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Raimondi/delimitMate'
-Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
+
+" Plug 'majutsushi/tagbar'
 " Plug 'Yggdroot/indentLine'
 " let g:indentLine_char = '┊'
 
@@ -260,6 +261,13 @@ let g:session_autoload = "no"
 let g:session_autosave = "yes"
 let g:session_command_aliases = 1
 
+" session management
+nnoremap <leader>so :OpenSession<Space>
+nnoremap <leader>ss :SaveSession<Space>
+nnoremap <leader>sd :DeleteSession<CR>
+nnoremap <leader>sc :CloseSession<CR>
+
+
 "}}}
 " {{{ Bookmarks
 
@@ -316,26 +324,64 @@ let g:airline#extensions#virtualenv#enabled = 1
 ""}}}
 " FZF {{{
 "
-let g:fzf_layout = { 'down': '~40%' }
+" let g:fzf_layout = { 'down': '~40%' }
 
 " In Neovim, you can set up fzf window using a Vim command
 " let g:fzf_layout = { 'window': 'enew' }
 " let g:fzf_layout = { 'window': '-tabnew' }
 
 " Customize fzf colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+" let g:fzf_colors =
+" \ { 'fg':      ['fg', 'Normal'],
+"   \ 'bg':      ['bg', 'Normal'],
+"   \ 'hl':      ['fg', 'Comment'],
+"   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+"   \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+"   \ 'hl+':     ['fg', 'Statement'],
+"   \ 'info':    ['fg', 'PreProc'],
+"   \ 'prompt':  ['fg', 'Conditional'],
+"   \ 'pointer': ['fg', 'Exception'],
+"   \ 'marker':  ['fg', 'Keyword'],
+"   \ 'spinner': ['fg', 'Label'],
+"   \ 'header':  ['fg', 'Comment'] }
+"
+" noremap <leader>n :GFiles<cr>
+" noremap <leader>N :Files<cr>
+" noremap <leader>b :Buffers<cr>
+
+" }}}
+" PLUGIN Unite {{{
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()
+    " Overwrite settings.
+    nmap <buffer> <c-c>   <Plug>(unite_exit)
+    imap <buffer> <c-c>   <Plug>(unite_exit)
+endfunction
+
+" silent nunmap <Leader>n
+
+nnoremap <leader>n :<C-u>Unite -no-split -no-auto-resize -ignorecase -start-insert file_rec<cr>
+nnoremap <leader>b :silent Unite -no-split -no-auto-resize -ignorecase -start-insert buffer<cr>
+nnoremap <leader>o :<C-u>Unite -no-split -no-auto-resize -ignorecase -start-insert outline<cr>
+nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=tags -start-insert tag<cr>
+
+" nnoremap <leader>n :<C-u>Unite -no-split -buffer-name=recfiles -start-insert file_rec/async:!<cr>
+" nnoremap <leader>f :<C-u>UniteWithBufferDir -no-split -no-auto-resize -ignorecase -start-insert file<cr>
+" nnoremap <leader>F :<C-u>Unite -no-split -no-auto-resize -ignorecase -start-insert file<cr>
+" call unite#custom#profile('outline', 'smartcase', 0)
+" nnoremap <leader>t :silent <C-u>Unite -no-split -no-auto-resize -ignorecase -start-insert outline<cr>
+" nnoremap <leader>n :<C-u>Unite -no-split -buffer-name=recfiles -start-insert file_rec/async<cr>
+" nnoremap <leader>n :<C-u>Unite -no-split -no-auto-resize -ignorecase -start-insert file_rec/async:!<cr>
+" nnoremap <leader>T :<C-u>Unite -no-split -buffer-name=tags -start-insert outline<cr>
+" Use ag for search
+if executable('ag')
+    let g:unite_source_grep_command = 'ag'
+    let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+    let g:unite_source_grep_recursive_opt = ''
+endif
+" nnoremap <leader>a :<C-u>Unite -no-split -no-auto-resize -buffer-name=grep grep<cr>
+"
+call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '\.o$\|\.pyc$\|\.idea/*\|\.rope/*\|.cache/*\|.__pycach*\|\attic/|\.git/')
 
 " }}}
 
@@ -489,9 +535,6 @@ vnoremap K :m '<-2<CR>gv=gv
 
 
 
-noremap <leader>n :GFiles<cr>
-noremap <leader>N :Files<cr>
-noremap <leader>b :Buffers<cr>
 
 "" Git
 
@@ -507,12 +550,6 @@ noremap <leader>b :Buffers<cr>
 " noremap <Leader>gb :Gblame<CR>
 " noremap <Leader>gr :Gremove<CR>
 
-" session management
-nnoremap <leader>so :OpenSession<Space>
-nnoremap <leader>ss :SaveSession<Space>
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
-
 
 "" Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
@@ -524,10 +561,10 @@ nnoremap <leader>. :lcd %:p:h<CR>
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 " snippets
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-let g:UltiSnipsEditSplit="vertical"
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<tab>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+" let g:UltiSnipsEditSplit="vertical"
 
 " syntastic
 let g:syntastic_always_populate_loc_list=1
