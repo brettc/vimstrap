@@ -242,7 +242,12 @@ endif
 
 "}}}
 " Terminal Handling {{{
-if exists('$TMUX')
+if has('win32unix')
+    let &t_ti.="\e[1 q"
+    let &t_SI.="\e[5 q"
+    let &t_EI.="\e[1 q"
+    let &t_te.="\e[0 q"
+elseif exists('$TMUX')
     let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
     let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
     let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
@@ -251,6 +256,7 @@ else
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
     let &t_SR = "\<esc>]50;CursorShape=2\x7"
 endif
+
 
 " }}}
 
@@ -289,34 +295,34 @@ if !exists('g:airline_symbols')
 endif
 
 if !exists('g:airline_powerline_fonts')
-  let g:airline#extensions#tabline#left_sep = ' '
-  let g:airline#extensions#tabline#left_alt_sep = '|'
-  let g:airline_left_sep          = '▶'
-  let g:airline_left_alt_sep      = '»'
-  let g:airline_right_sep         = '◀'
-  let g:airline_right_alt_sep     = '«'
-  let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
-  let g:airline#extensions#readonly#symbol   = '⊘'
-  let g:airline#extensions#linecolumn#prefix = '¶'
-  let g:airline#extensions#paste#symbol      = 'ρ'
-  let g:airline_symbols.linenr    = '␊'
-  let g:airline_symbols.branch    = '⎇'
-  let g:airline_symbols.paste     = 'ρ'
-  let g:airline_symbols.paste     = 'Þ'
-  let g:airline_symbols.paste     = '∥'
-  let g:airline_symbols.whitespace = 'Ξ'
+  " let g:airline#extensions#tabline#left_sep = ' '
+  " let g:airline#extensions#tabline#left_alt_sep = '|'
+  " let g:airline_left_sep          = '▶'
+  " let g:airline_left_alt_sep      = '»'
+  " let g:airline_right_sep         = '◀'
+  " let g:airline_right_alt_sep     = '«'
+  " let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
+  " let g:airline#extensions#readonly#symbol   = '⊘'
+  " let g:airline#extensions#linecolumn#prefix = '¶'
+  " let g:airline#extensions#paste#symbol      = 'ρ'
+  " let g:airline_symbols.linenr    = '␊'
+  " let g:airline_symbols.branch    = '⎇'
+  " let g:airline_symbols.paste     = 'ρ'
+  " let g:airline_symbols.paste     = 'Þ'
+  " let g:airline_symbols.paste     = '∥'
+  " let g:airline_symbols.whitespace = 'Ξ'
 else
-  let g:airline#extensions#tabline#left_sep = ''
-  let g:airline#extensions#tabline#left_alt_sep = ''
+  " let g:airline#extensions#tabline#left_sep = ''
+  " let g:airline#extensions#tabline#left_alt_sep = ''
 
   " powerline symbols
-  let g:airline_left_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_right_alt_sep = ''
-  let g:airline_symbols.branch = ''
-  let g:airline_symbols.readonly = ''
-  let g:airline_symbols.linenr = ''
+  " let g:airline_left_sep = ''
+  " let g:airline_left_alt_sep = ''
+  " let g:airline_right_sep = ''
+  " let g:airline_right_alt_sep = ''
+  " let g:airline_symbols.branch = ''
+  " let g:airline_symbols.readonly = ''
+  " let g:airline_symbols.linenr = ''
 endif
 
 " vim-airline
@@ -569,10 +575,10 @@ noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 " syntastic
 let g:syntastic_always_populate_loc_list=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
+" let g:syntastic_error_symbol='✗'
+" let g:syntastic_warning_symbol='⚠'
+" let g:syntastic_style_error_symbol = '✗'
+" let g:syntastic_style_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
 
