@@ -83,7 +83,7 @@ Plug 'sheerun/vim-polyglot'
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'zchee/deoplete-jedi'
 " Not sure why I need this AND deoplete...
-Plug 'davidhalter/jedi-vim'
+" Plug 'davidhalter/jedi-vim'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'tell-k/vim-autopep8'
 Plug 'tmhedberg/SimpylFold'
@@ -101,22 +101,21 @@ Plug 'vim-scripts/dbext.vim'
 " Writing-----------------
 Plug 'junegunn/goyo.vim'
 " Plug 'junegunn/limelight.vim'
-Plug 'vim-pandoc/vim-pantondoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'vim-pandoc/vim-pandoc-after'
+" Plug 'vim-pandoc/vim-pantondoc'
+" Plug 'vim-pandoc/vim-pandoc-syntax'
+" Plug 'vim-pandoc/vim-pandoc-after'
 
-Plug 'lervag/vimtex'
-
-Plug 'reedes/vim-wordy'
-Plug 'reedes/vim-textobj-sentence'
+" Plug 'lervag/vimtex'
+" Plug 'reedes/vim-wordy'
+" Plug 'reedes/vim-textobj-sentence'
 
 "" Vim-Session
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 
 "" Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
 
 "" Colors
 Plug 'vim-airline/vim-airline'
