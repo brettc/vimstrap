@@ -198,7 +198,7 @@ set ruler
 " I don't like this.
 " set number
 
-set termguicolors
+" set termguicolors
 set t_Co=256
 
 " My preferred scheme
