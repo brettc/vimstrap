@@ -70,7 +70,8 @@ Plug 'Shougo/unite-outline'
 " Plug 'bronson/vim-trailing-whitespace'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Raimondi/delimitMate'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 
 " Plug 'majutsushi/tagbar'
 " Plug 'Yggdroot/indentLine'
@@ -389,6 +390,13 @@ endif
 "
 call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '\.o$\|\.pyc$\|\.idea/*\|\.rope/*\|.cache/*\|.__pycach*\|\attic/|\.git/')
 
+" }}}
+" ALE options {{{
+
+" let g:ale_python_pylint_options = '--disable C0111'
+let g:ale_python_pylint_options = '--rcfile setup.cfg'
+let g:ale_echo_msg_format = '[%severity%]:[%linter%] - %s'
+let g:ale_lint_on_text_changed = 'never'
 " }}}
 
 " File Handling
