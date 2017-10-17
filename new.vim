@@ -403,6 +403,7 @@ endif
 call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '\.o$\|\.pyc$\|\.idea/*\|\.rope/*\|.cache/*\|.__pycach*\|\attic/|\.git/')
 
 " }}}
+
 " PLUGIN Sneak {{{
 let g:sneak#s_next = 1
 " }}}
@@ -411,6 +412,10 @@ let g:sneak#s_next = 1
 let g:ale_fixers = { 'python': [ 'autopep8' ] }
 nmap ,F <Plug>(ale_fix)
 
+" ALE options {{{
+
+let g:ale_echo_msg_format = '[%severity%]:[%linter%] - %s'
+let g:ale_lint_on_text_changed = 'never'
 let g:ale_python_mypy_options = '-ignore-missing-imports'
 let g:ale_python_pylint_options = '--rcfile=setup.cfg'
 
