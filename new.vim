@@ -70,7 +70,8 @@ Plug 'Shougo/unite-outline'
 " Plug 'bronson/vim-trailing-whitespace'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Raimondi/delimitMate'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 
 " Plug 'majutsushi/tagbar'
 " Plug 'Yggdroot/indentLine'
@@ -86,11 +87,11 @@ Plug 'sheerun/vim-polyglot'
 " Plug 'davidhalter/jedi-vim'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'tell-k/vim-autopep8'
-Plug 'tmhedberg/SimpylFold'
+" Plug 'tmhedberg/SimpylFold'
 Plug 'alfredodeza/pytest.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'bps/vim-textobj-python'
-Plug 'Konfekt/FastFold'
+" Plug 'Konfekt/FastFold'
 " Plug 'janko-m/vim-test'
 " Plug '5long/pytest-vim-compiler'
 " Plug 'Rykka/doctest.vim'
@@ -100,6 +101,7 @@ Plug 'vim-scripts/dbext.vim'
 
 " Writing-----------------
 Plug 'junegunn/goyo.vim'
+" Plug 'justinmk/vim-sneak'
 " Plug 'junegunn/limelight.vim'
 " Plug 'vim-pandoc/vim-pantondoc'
 " Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -116,6 +118,10 @@ Plug 'xolox/vim-session'
 "" Snippets
 " Plug 'SirVer/ultisnips'
 " Plug 'honza/vim-snippets'
+"
+" Plug 'roxma/vim-hug-neovim-rpc'
+" Plug 'roxma/nvim-completion-manager'
+Plug 'maralla/completor.vim'
 
 "" Colors
 Plug 'vim-airline/vim-airline'
@@ -241,20 +247,27 @@ endif
 
 "}}}
 " Terminal Handling {{{
-if has('win32unix')
-    let &t_ti.="\e[1 q"
-    let &t_SI.="\e[5 q"
-    let &t_EI.="\e[1 q"
-    let &t_te.="\e[0 q"
-elseif exists('$TMUX')
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-    let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\"
 else
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-    let &t_SR = "\<esc>]50;CursorShape=2\x7"
+    let &t_SI = "\e[5 q"
+    let &t_EI = "\e[2 q"
 endif
+" if has('win32unix')
+"     let &t_ti.="\e[1 q"
+"     let &t_SI.="\e[5 q"
+"     let &t_EI.="\e[1 q"
+"     let &t_te.="\e[0 q"
+" if exists('$TMUX')
+"     let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+"     let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+"     let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+" else
+"     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+"     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+"     let &t_SR = "\<esc>]50;CursorShape=2\x7"
+" endif
 
 
 " }}}
@@ -390,8 +403,19 @@ endif
 call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern', '\.o$\|\.pyc$\|\.idea/*\|\.rope/*\|.cache/*\|.__pycach*\|\attic/|\.git/')
 
 " }}}
+" PLUGIN Sneak {{{
+let g:sneak#s_next = 1
+" }}}
+" ALE {{{
 
-" File Handling
+let g:ale_fixers = { 'python': [ 'autopep8' ] }
+nmap ,F <Plug>(ale_fix)
+
+let g:ale_python_mypy_options = '-ignore-missing-imports'
+let g:ale_python_pylint_options = '--rcfile=setup.cfg'
+
+" }}}
+"
 " Autocmd Rules {{{
 " The PC is fast enough, do syntax highlight syncing from start unless 200 lines
 augroup vimrc-sync-fromstart
@@ -494,7 +518,7 @@ cnoreabbrev Qall qall
 " Mappings ---------------------------------------------------------------- {{{
 
 " Dvorak easiness
-nnoremap ; :
+" nnoremap ; :
 
 " Still can't leave this behind
 map <c-s> :w<CR>

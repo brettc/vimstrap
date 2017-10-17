@@ -31,11 +31,15 @@ Plug 'xolox/vim-session'
 
 " This is my file explorer! It is all I need.
 Plug 'tpope/vim-vinegar'
+Plug 'roxma/nvim-completion-manager'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-"" Colors
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'NLKNguyen/papercolor-theme'
+" Commenting
+Plug 'tpope/vim-commentary'
+
+" Unix commands.
+Plug 'tpope/vim-eunuch'
+
 
 " Versioning / Git etc
 Plug 'tpope/vim-fugitive'
@@ -44,11 +48,15 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Raimondi/delimitMate'
-Plug 'scrooloose/syntastic'
 
 " Writing etc
 Plug 'junegunn/goyo.vim'
-Plug 'unblevable/quick-scope'
+" Plug 'unblevable/quick-scope'
+
+"" Colors
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'NLKNguyen/papercolor-theme'
 
 call plug#end()
 
@@ -181,4 +189,58 @@ nnoremap <leader>so :OpenSession<Space>
 nnoremap <leader>ss :SaveSession<Space>
 nnoremap <leader>sd :DeleteSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
+" }}}
+
+" Mappings ---------------------------------------------------------------- {{{
+
+" Dvorak easiness
+" nnoremap ; :
+
+" Still can't leave this behind
+map <c-s> :w<CR>
+
+" Split
+noremap <Leader>h :<C-u>split<CR>
+noremap <Leader>v :<C-u>vsplit<CR>
+noremap <Leader>c <C-w>c
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+" nnoremap n nzzzv
+" nnoremap N Nzzzv
+
+"" Buffer nav
+" noremap <silent> <S-t> :bn<CR>
+" noremap <silent> <S-h> :bp<CR>
+
+"" Tabs
+" nnoremap <Tab> gt
+" nnoremap <S-Tab> gT
+nnoremap <silent> <S-t> :tabnew<CR>
+
+"" Clean search (highlight)
+nnoremap <silent> <leader><space> :noh<cr>
+
+"" Switching windows
+" noremap <C-j> <C-w>j
+" noremap <C-k> <C-w>k
+" noremap <C-l> <C-w>l
+" noremap <C-h> <C-w>h
+noremap <C-right> <C-w>w
+noremap <C-left> <C-w>W
+noremap <S-right> :bn<cr>
+noremap <S-left> :bp<cr>
+
+"" Vmap for maintain Visual Mode after shifting > and <
+" vmap < <gv
+" vmap > >gv
+
+"" Move visual block
+" vnoremap J :m '>+1<CR>gv=gv
+" vnoremap K :m '<-2<CR>gv=gv
+
+nnoremap <Leader>vv :e $HOME/.config/nvim/init.vim
+" }}}
+"
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
